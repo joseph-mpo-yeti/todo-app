@@ -30,6 +30,18 @@ npx jest backend/tests/api.test.js
 ## Build
 ```bash
 npm run build   # creates a production bundle in frontend/dist
+
+## Docker
+
+The application can be containerized with Docker. Build and run both services using:
+```bash
+docker compose up --build
+```
+- Backend runs on port 4000 (`http://localhost:4000/api/todos`).
+- Frontend is served by Nginx on port 5173 (`http://localhost:5173`).
+
+Make sure Docker is installed and the current directory contains `docker-compose.yml`, `backend/Dockerfile`, and `frontend/Dockerfile`.
+
 ```
 
 ## License

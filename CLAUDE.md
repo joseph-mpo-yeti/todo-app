@@ -10,6 +10,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | | `npm run dev` | Start the Vite development server (http://localhost:5173). The Vite config proxies `/api/*` requests to the backend at `http://localhost:4000`. |
 | | `npm run build` | Produce a production‑ready static bundle in `frontend/dist`. |
 | | `npm run preview` | Serve the built bundle locally for a quick production preview. |
+
+## Docker
+
+- Build and run both services:
+```bash
+docker compose up --build
+```
+- Backend runs on port 4000 (`http://localhost:4000/api/todos`).
+- Frontend is served by Nginx on port 5173 (`http://localhost:5173`).
+
+Make sure Docker is installed and the repository contains `docker-compose.yml`, `backend/Dockerfile`, and `frontend/Dockerfile`.
+
 | **Backend (Node HTTP server)** | `node backend/server.js` | Launch the backend API server on the port defined by `PORT` (default 4000). |
 | **Tests** | `npm i -D jest supertest` *(run once in the repository root or in `backend` if you prefer a separate `package.json`)* | Install the test runner and HTTP‑request helper. |
 | | `npx jest backend/tests/api.test.js` | Execute the API test suite. Use `npx jest` with a path pattern to run a specific test file. |
