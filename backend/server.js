@@ -1,6 +1,16 @@
 const http = require('http');
 const { URL } = require('url');
 const todoModel = require('./models/todo');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`)
+  ),
+  transports: [new winston.transports.Console()],
+});
 
 function jsonResponse(res, status, data) {
   const payload = JSON.stringify(data);
@@ -24,7 +34,7 @@ const getBody = async (req) => new Promise((resolve, reject) => {
   });
 });
 
-const server = http.createServer(async (req, res) => {
+  logger.info(`Request ${req.method} ${req.url}`);
   const parsedUrl = new URL(req.url, `http://localhost`);
   const pathname = parsedUrl.pathname;
   const method = req.method;
@@ -92,7 +102,7 @@ const server = http.createServer(async (req, res) => {
 
 const PORT = process.env.PORT || 4000;
 if (require.main === module) {
-  server.listen(PORT, () => console.log(`Backend listening on port ${PORT}`));
+  server.listen(PORT, () => logger.info(`Backend listening on port ${PORT}`));
 }
 
 module.exports = server;

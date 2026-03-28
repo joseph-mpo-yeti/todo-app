@@ -1,5 +1,5 @@
 # Use an official Node runtime as a parent image
-FROM node:18-alpine AS builder
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -15,4 +15,5 @@ COPY . .
 EXPOSE 4000
 
 # Run the server
+CMD ["node", "server.js"]
 CMD ["node", "server.js"]
