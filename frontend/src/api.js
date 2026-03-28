@@ -1,3 +1,5 @@
+const API_BASE = 'http://backend:4000';
+
 async function parseResponse(res) {
   if (!res.ok) {
     throw new Error(`Failed: ${res.status}`);
@@ -6,12 +8,12 @@ async function parseResponse(res) {
 }
 
 export async function fetchTodos() {
-  const res = await fetch('/api/todos');
+  const res = await fetch(`${API_BASE}/api/todos`);
   return parseResponse(res);
 }
 
 export async function createTodo({ title, description }) {
-  const res = await fetch('/api/todos', {
+  const res = await fetch(`${API_BASE}/api/todos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, description }),
@@ -20,7 +22,7 @@ export async function createTodo({ title, description }) {
 }
 
 export async function updateTodo(id, payload) {
-  const res = await fetch(`/api/todos/${id}`, {
+  const res = await fetch(`${API_BASE}/api/todos/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -29,6 +31,6 @@ export async function updateTodo(id, payload) {
 }
 
 export async function deleteTodo(id) {
-  const res = await fetch(`/api/todos/${id}`, { method: 'DELETE' });
+  const res = await fetch(`${API_BASE}/api/todos/${id}`, { method: 'DELETE' });
   return parseResponse(res);
 }
