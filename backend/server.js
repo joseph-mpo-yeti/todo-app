@@ -34,6 +34,7 @@ const getBody = async (req) => new Promise((resolve, reject) => {
   });
 });
 
+const server = http.createServer(async (req, res) => {
   logger.info(`Request ${req.method} ${req.url}`);
   const parsedUrl = new URL(req.url, `http://localhost`);
   const pathname = parsedUrl.pathname;

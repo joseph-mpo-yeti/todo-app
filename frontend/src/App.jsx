@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import EditTodoModal from './components/EditTodoModal';
-import { fetchTodos, createTodo, updateTodo, deleteTodo } from './api';
 
 function sortByCreatedAtDesc(items) {
   return [...items].sort((a, b) => {
@@ -18,52 +17,33 @@ export default function App() {
   const [editingTodo, setEditingTodo] = useState(null);
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
-  const loadTodos = async () => {
-    setError('');
-    try {
-      const data = await fetchTodos();
-      setTodos(sortByCreatedAtDesc(data));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
+  // No external API; start with empty list or static sample
   useEffect(() => {
-    loadTodos();
+    // initialize with empty list; could add sample data here
+    setTodos([]);
   }, []);
 
-  const handleAdd = async (title, description) => {
-    setError('');
-    try {
-      await createTodo({ title, description });
-      await loadTodos();
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleAdd = (title, description) => {
+    const newTodo = {
+      id: Date.now(),
+      title,
+      description,
+      createdAt: new Date().toISOString(),
+    };
+    setTodos(prev => sortByCreatedAtDesc([...prev, newTodo]));
   };
 
-  const handleUpdate = async (id, payload) => {
-    setError('');
+  const handleUpdate = (id, payload) => {
     setIsSavingEdit(true);
-    try {
-      await updateTodo(id, payload);
-      setEditingTodo(null);
-      await loadTodos();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsSavingEdit(false);
-    }
+    setTodos(prev =>
+      prev.map(t => (t.id === id ? { ...t, ...payload } : t))
+    );
+    setEditingTodo(null);
+    setIsSavingEdit(false);
   };
 
-  const handleDelete = async (id) => {
-    setError('');
-    try {
-      await deleteTodo(id);
-      await loadTodos();
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleDelete = (id) => {
+    setTodos(prev => prev.filter(t => t.id !== id));
   };
 
   const handleReorder = (sourceId, targetId) => {
